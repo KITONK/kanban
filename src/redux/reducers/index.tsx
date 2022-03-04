@@ -1,38 +1,69 @@
+import { ADD_CARD, MOVE_CARD } from "../actions/actions";
 
-import * as actions from "../actions/actions";
 
 const initialState = {
-    tasks: [],
+    boards: [
+        {
+            id: 1,
+            title: "To do",
+            tasks: [
+              {
+                id: 1,
+                text: "Task title goes here1",
+                description: "Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor..."
+              },
+            ],
+          },
+          {
+            id: 2,
+            title: "In progress",
+            tasks: [
+              {
+                id: 2,
+                text: "Task title goes here2",
+                description: "Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor..."
+              },
+            ],
+          },
+          {
+            id: 3,
+            title: "Review",
+            tasks: [
+                
+            ],
+          },
+          {
+            id: 4,
+            title: "Done",
+            tasks: [
+      
+            ],
+          },
+    ],
 }
 
 export const Reducer = (state = initialState, action: any) => {
     switch(action.type) {
-        case actions.MOVE: {
-            const {columnIndex, taskIndex, direction} = action
-            console.log("hello");
-            // const board = action.payload;
-            // const tasks = [...state.tasks, board];
-            return {...state, 
-                tasks: [...state.tasks, {text: "aads", description: "everv", id: 2}]
-            };
-            // const board = [...state.boards];
-            // board[columnIndex] = {
-            //     ...board[columnIndex],
-            //     tasks: [...board[columnIndex].tasks]
-            // }
-            // board[columnIndex + direction] = {
-            //     ...board[columnIndex + direction],
-            //     tasks: [...board[columnIndex + direction].tasks]
-            // }
-            // const task = board[columnIndex].tasks.splice(taskIndex, 1);
-            // board[columnIndex + direction].tasks.splice(taskIndex, 0, task);
-            // board[columnIndex + direction].tasks.push(task)
-            // return {...state, board};
+        case MOVE_CARD: {
+            const newBoards = [...state.boards]
+            const [task] = newBoards[action.payload.columnIndex].tasks.splice(action.payload.taskIndex, 1)
+            newBoards[action.payload.columnIndex + action.payload.direction].tasks.push(task)
+            return {...state, boards: newBoards}
+        }
+
+        case ADD_CARD: {
+            const newBoards = [...state.boards].map((board: any) => {
+                if(board.id === action.payload.listId) {
+                    board.tasks = [...board.tasks, action.payload.taskObj];
+                }
+                return board;
+            });
+            return {...state, boards: newBoards}
         }
 
         default: 
             return state;
     }
-}
+};
 
-export const move = (columnIndex: any, taskIndex: any, direction: any) => ({type: actions.MOVE, columnIndex, taskIndex, direction}); 
+export const getBoards = (state: any) => state.boards;

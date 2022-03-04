@@ -1,96 +1,40 @@
 import { useState } from 'react';
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import styled from 'styled-components';
 import AddTask from '../components/AddTask';
 import Container from '../components/Container';
 import VerticalBlock from '../components/VericalBlock';
-import { move } from '../redux/reducers';
-
-const boards = [
-  {
-    title: "To do",
-  },
-  {
-    title: "In progress",
-  },
-  {
-    title: "Review",
-  },
-  {
-    title: "Done",
-  },
-]
+import { addCard, moveCard } from '../redux/actions/actions';
+import { getBoards } from '../redux/reducers';
 
 const DIRECTION_LEFT = -1;
 const DIRECTION_RIGHT = 1;
 
 const Home = () => {
   const dispatch = useDispatch();
-  const [boards, setBoarders] = useState([
-    {
-      id: 1,
-      title: "To do",
-      tasks: [
-        {
-          id: 1,
-          text: "Task title goes here1",
-          description: "Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor..."
-        },
-      ],
-    },
-    {
-      id: 2,
-      title: "In progress",
-      tasks: [
-        {
-          id: 2,
-          text: "Task title goes here2",
-          description: "Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor..."
-        },
-      ],
-    },
-    {
-      id: 3,
-      title: "Review",
-      tasks: [
 
-      ],
-    },
-    {
-      id: 4,
-      title: "Done",
-      tasks: [
-
-      ],
-    },
-  ]);
+  const boards = useSelector(getBoards);
   
   const onAddTask = (listId: any, taskObj: any) => {
-    const newList = boards.map((board: any) => {
-        if(board.id === listId) {
-          board.tasks = [...board.tasks, taskObj];
-        }
-        return board;
-    });
-    setBoarders(newList);
+    dispatch(addCard({listId, taskObj}));
   }
 
   const onMove = (columnIndex: number, taskIndex: number, direction: any) => {
-    dispatch(move(columnIndex, taskIndex, direction));
+    dispatch(moveCard({columnIndex, taskIndex, direction}));
   }
 
-  const handleMove = (columnIndex: number, taskIndex: number, direction: any) => {
-        console.log("hello")
-        setBoarders(board => {
-          board = [...board];
-          // board[columnIndex].tasks = [...board[columnIndex].tasks];
-          const task = board[columnIndex].tasks.splice(taskIndex, 1);
-          board[columnIndex + direction].tasks.splice(taskIndex, 0, ...task);
-          // board[columnIndex + direction].tasks = [...board[columnIndex + direction].tasks];
-          // board[columnIndex + direction].tasks.push(task);
-          return board;
-        })
-  }
+  // const handleMove = (columnIndex: number, taskIndex: number, direction: any) => {
+  //       console.log("hello")
+  //       setBoarders(board => {
+  //         board = [...board];
+  //         // board[columnIndex].tasks = [...board[columnIndex].tasks];
+  //         const task = board[columnIndex].tasks.splice(taskIndex, 1);
+  //         board[columnIndex + direction].tasks.splice(taskIndex, 0, ...task);
+  //         // board[columnIndex + direction].tasks = [...board[columnIndex + direction].tasks];
+  //         // board[columnIndex + direction].tasks.push(task);
+  //         return board;
+  //       })
+  // }
 
   return (
       <Wrapper>
