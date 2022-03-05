@@ -1,4 +1,4 @@
-import { ADD_CARD, MOVE_CARD } from "../actions/actions";
+import { ADD_CARD, DELETE_CARD, MOVE_CARD } from "../actions/actions";
 
 
 const initialState = {
@@ -6,36 +6,66 @@ const initialState = {
         {
             id: 1,
             title: "To do",
-            tasks: [
+            cards: [
               {
                 id: 1,
                 text: "Task title goes here1",
-                description: "Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor..."
+                description: "Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor...",
+                tags: [
+                    {
+                        bgcolor: "red",
+                        color: "white",
+                        title: "MileAuto",
+                    },
+                ],
+                user: [
+                    {
+                        name: "Phil",
+                        firstName: "Phillip",
+                        lastName: 'Ghostling',
+                        email: "phil.ghost@gmail.com"
+                    },
+                ],
               },
             ],
           },
           {
             id: 2,
             title: "In progress",
-            tasks: [
+            cards: [
               {
                 id: 2,
                 text: "Task title goes here2",
-                description: "Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor..."
+                description: "Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor...",
+                tags: [
+                    {
+                        bgcolor: "black",
+                        color: "white",
+                        title: "Fundee"
+                    },
+                ],
+                user: [
+                    {
+                        name: "Phil",
+                        firstName: "Phillip",
+                        lastName: 'Ghostling',
+                        email: "phil.ghost@gmail.com"
+                    },
+                ],
               },
             ],
           },
           {
             id: 3,
             title: "Review",
-            tasks: [
+            cards: [
                 
             ],
           },
           {
             id: 4,
             title: "Done",
-            tasks: [
+            cards: [
       
             ],
           },
@@ -46,19 +76,29 @@ export const cardReducer = (state = initialState, action: any) => {
     switch(action.type) {
         case MOVE_CARD: {
             const newBoards = [...state.boards]
-            const [task] = newBoards[action.payload.columnIndex].tasks.splice(action.payload.taskIndex, 1)
-            newBoards[action.payload.columnIndex + action.payload.direction].tasks.push(task)
+            const [task] = newBoards[action.payload.columnIndex].cards.splice(action.payload.taskIndex, 1)
+            newBoards[action.payload.columnIndex + action.payload.direction].cards.push(task)
             return {...state, boards: newBoards}
         }
 
         case ADD_CARD: {
             const newBoards = [...state.boards].map((board: any) => {
                 if(board.id === action.payload.listId) {
-                    board.tasks = [...board.tasks, action.payload.taskObj];
+                    board.cards = [...board.cards, action.payload.taskObj];
                 }
                 return board;
             });
             return {...state, boards: newBoards}
+        }
+
+        case DELETE_CARD: {
+            const newBoards = [...state.boards].map((board: any) => {
+                if(board.id === action.payload.listId) {
+                  board.cards = [...board.cards.filter((card: any) => card.id !== action.payload.taskId)];
+                }
+                return board;
+              });
+              return {...state, boards: newBoards}
         }
 
         default: 

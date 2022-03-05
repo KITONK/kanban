@@ -1,22 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import CardDetail from "./Modal";
+import DetailCard from "./Modal";
 
 interface Props {
     card: any;
-    canMoveLeft: any;
-    canMoveRight: any;
-    onMoveLeft: any;
-    onMoveRight: any;
+    status?: any;
+    canMoveLeft?: any;
+    canMoveRight?: any;
+    onMoveLeft?: any;
+    onMoveRight?: any;
+    onOpen?: any;
 }
 
 const Card = ({
     card,
+    status,
     canMoveLeft, 
     canMoveRight,
     onMoveLeft,
-    onMoveRight
-    } : Props) => (
-    <Wrapper>
+    onMoveRight,
+    onOpen,
+    } : Props) => {
+
+    return (
+    <Wrapper onClick={onOpen}>
         <Title>
             <Text>{card.text}</Text>
             <Action>
@@ -30,7 +38,7 @@ const Card = ({
         </Title>
         <Description>{card.description}</Description>
     </Wrapper>
-);
+)};
 
 const Wrapper = styled.div`
     padding: 19px 13px;
@@ -84,6 +92,13 @@ const Description= styled.p`
     @media (max-width: 1440px) {
         font-size: 18px;
     }
+`;
+
+const Tag = styled.span`
+  padding: 2px 3px;
+  border-radius: 3px;
+  margin: 2px 5px;
+  font-size: 70%;
 `;
 
 export default Card;
