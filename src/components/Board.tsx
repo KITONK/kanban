@@ -1,33 +1,36 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import Task from "./Task";
+
+import Card from "./Card";
 
 interface Props {
     board: any;
-    tasks: any;
+    cards: any;
     columnIndex: number;
     onMoveLeft: any;
     onMoveRight: any;
 }
 
-const VerticalBlock = ({
+const Board = ({
     board,
-    tasks, 
+    cards, 
     columnIndex,
     onMoveLeft,
     onMoveRight,
     } : Props) => {
     return (
         <Wrapper>
-            <Title><span>{board.title}</span></Title>
-            {tasks.map((task: any, taskIndex: any) => (
-                <Task 
-                    key={taskIndex} 
-                    task={task}
+            <Title>
+                <TitleText>{board.title}</TitleText>
+            </Title>
+            {cards.map((card: any, cardIndex: any) => (
+                <Card 
+                    key={cardIndex} 
+                    card={card}
                     canMoveLeft={columnIndex !== 0}
                     canMoveRight={columnIndex !== 3}
-                    onMoveLeft={() => onMoveLeft(taskIndex)}
-                    onMoveRight={() => onMoveRight(taskIndex)}
+                    onMoveLeft={() => onMoveLeft(cardIndex)}
+                    onMoveRight={() => onMoveRight(cardIndex)}
                 />
             ))}
         </Wrapper>
@@ -43,13 +46,13 @@ const Wrapper = styled.div`
 
 const Title = styled.div`
     margin-bottom: 63px;
-
-    span {
-        font-family: "Roboto", sans-serif;
-        font-size: 27px;
-        line-height: 32px;
-        color: #000000;
-    }
 `;
 
-export default VerticalBlock;
+const TitleText = styled.span`
+    font-family: "Roboto", sans-serif;
+    font-size: 27px;
+    line-height: 32px;
+    color: #000000;
+`;
+
+export default Board;

@@ -2,39 +2,38 @@ import { useState } from "react";
 import styled from "styled-components";
 
 interface Props {
-    board: any;
     onAddTask: (e:any, t: any) => void;
 }
 
-const AddTask = ({board, onAddTask} : Props) => {
+const AddCard = ({onAddTask} : Props) => {
 
     const [visiblePopup, setVisiblePopup] = useState(false);
-    const [taskTitleValue, setTaskTitleValue] = useState('');
-    const [taskDescriptionValue, setTaskDescriptionValue] = useState('');
+    const [cardTitleValue, setCardTitleValue] = useState('');
+    const [cardDescriptionValue, setCardDescriptionValue] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
     const onClose = () => {
         setVisiblePopup(false);
-        setTaskTitleValue('');
-        setTaskDescriptionValue('');
+        setCardTitleValue('');
+        setCardDescriptionValue('');
     }
 
     const addTask = () => {
-        if(!taskTitleValue || !taskDescriptionValue) {
+        if(!cardTitleValue || !cardDescriptionValue) {
             alert('Enter data');
             return;
         }
 
         const obj = {
             id: Math.random(),
-            text: taskTitleValue,
-            description: taskDescriptionValue,
+            text: cardTitleValue,
+            description: cardDescriptionValue,
         };
 
-        // setIsLoading(true);
+        setIsLoading(true);
         onAddTask(1, obj);
         onClose();
-        // setIsLoading(false);
+        setIsLoading(false);
 
     }
 
@@ -54,14 +53,14 @@ const AddTask = ({board, onAddTask} : Props) => {
                             />
                         </Button>
                         <Input 
-                            value={taskTitleValue} 
-                            onChange={e => setTaskTitleValue(e.target.value)} 
+                            value={cardTitleValue} 
+                            onChange={e => setCardTitleValue(e.target.value)} 
                             className="field" 
                             placeholder="Enter task title here"
                         />
                         <Input 
-                            value={taskDescriptionValue} 
-                            onChange={e => setTaskDescriptionValue(e.target.value)} 
+                            value={cardDescriptionValue} 
+                            onChange={e => setCardDescriptionValue(e.target.value)} 
                             className="field" 
                             placeholder="Enter task description here"
                             type="description"
@@ -168,4 +167,4 @@ const Button = styled.div<{type?: string}>`
 
 const Image = styled.img``;
 
-export default AddTask;
+export default AddCard;

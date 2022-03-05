@@ -42,7 +42,7 @@ const initialState = {
     ],
 }
 
-export const Reducer = (state = initialState, action: any) => {
+export const cardReducer = (state = initialState, action: any) => {
     switch(action.type) {
         case MOVE_CARD: {
             const newBoards = [...state.boards]

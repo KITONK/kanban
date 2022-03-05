@@ -1,5 +1,5 @@
 import { combineReducers, createStore } from "redux";
-import { Reducer } from "./reducers";
+import { cardReducer } from "./reducers";
 
 
-export const store = createStore(Reducer);
+export const store = createStore(cardReducer);
