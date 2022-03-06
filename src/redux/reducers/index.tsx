@@ -1,4 +1,4 @@
-import { ADD_CARD, DELETE_CARD, MOVE_CARD } from "../actions/actions";
+import { ADD_CARD, DELETE_CARD, EDIT_CARD, MOVE_CARD } from "../actions/actions";
 
 
 const initialState = {
@@ -11,13 +11,7 @@ const initialState = {
                 id: 1,
                 text: "Task title goes here1",
                 description: "Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor...",
-                tags: [
-                    {
-                        bgcolor: "red",
-                        color: "white",
-                        title: "MileAuto",
-                    },
-                ],
+                tag: "MileAuto",
                 user: [
                     {
                         name: "Phil",
@@ -37,13 +31,7 @@ const initialState = {
                 id: 2,
                 text: "Task title goes here2",
                 description: "Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor...",
-                tags: [
-                    {
-                        bgcolor: "black",
-                        color: "white",
-                        title: "Fundee"
-                    },
-                ],
+                tag: "Fundee",
                 user: [
                     {
                         name: "Phil",
@@ -85,6 +73,22 @@ export const cardReducer = (state = initialState, action: any) => {
             const newBoards = [...state.boards].map((board: any) => {
                 if(board.id === action.payload.listId) {
                     board.cards = [...board.cards, action.payload.taskObj];
+                }
+                return board;
+            });
+            return {...state, boards: newBoards}
+        }
+
+        case EDIT_CARD: {
+            const newBoards = [...state.boards].map((board: any) => {
+                if(board.id === action.payload.listId) {
+                    board.cards = [...board.cards].map((card: any) => {
+                        if(card.id === action.payload.taskObj.id) {
+                            card.text = action.payload.taskObj.text;
+                            card.description = action.payload.taskObj.description;
+                        }
+                        return card;
+                    });
                 }
                 return board;
             });

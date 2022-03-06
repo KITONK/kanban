@@ -1,7 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import CardDetail from "./Modal";
-import DetailCard from "./Modal";
 
 interface Props {
     card: any;
@@ -92,13 +90,6 @@ const Description= styled.p`
     @media (max-width: 1440px) {
         font-size: 18px;
     }
-`;
-
-const Tag = styled.span`
-  padding: 2px 3px;
-  border-radius: 3px;
-  margin: 2px 5px;
-  font-size: 70%;
 `;
 
 export default Card;

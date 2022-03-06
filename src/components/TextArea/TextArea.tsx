@@ -2,17 +2,15 @@ import styled from "styled-components";
 
 interface Props {
     label: string;
-    type?:string;
     name: string;
     value: string;
     placeholder: any;
     onChange?: (e: any) => void;
 }
 
-const Input = ({
+const TextArea = ({
     label,
     name,
-    type,
     value,
     placeholder,
     onChange,
@@ -20,8 +18,7 @@ const Input = ({
     return (
         <Label>
             {label}
-            <InputField 
-                type={type}
+            <TextAreaField 
                 name={name}
                 value={value}
                 onChange={onChange}
@@ -39,11 +36,14 @@ const Label = styled.label`
     margin-bottom: 40px;
 `;
 
-const InputField = styled.input`
+const TextAreaField = styled.textarea`
     padding: 13px 20px;
     font-size: 18px;
     border-radius: 8px;
     border: 2px solid #c7c7c7;
+    height: 200px;
+    resize: none;
+    font-family: "Roboto", sans-serif;
 `;
 
-export default Input;
+export default TextArea;

@@ -1,12 +1,11 @@
 import styled from 'styled-components';
 import {useDispatch, useSelector} from "react-redux";
 
-import Container from '../components/Container';
-import Board from '../components/Board';
-import AddCard from '../components/AddCard';
-import { addCard, moveCard, removeCard } from '../redux/actions/actions';
+import Container from '../module/Container';
+import Board from '../module/Board';
+import AddCard from '../module/AddCard';
+import { addCard, editCard, moveCard, removeCard } from '../redux/actions/actions';
 import { getBoards } from '../redux/reducers';
-import { useState } from 'react';
 
 const DIRECTION_LEFT = -1;
 const DIRECTION_RIGHT = 1;
@@ -15,7 +14,7 @@ const Home = () => {
   const dispatch = useDispatch();
   const boards = useSelector(getBoards);
   
-  const onAddTask = (listId: any, taskObj: any) => {
+  const onAddCard = (listId: any, taskObj: any) => {
     dispatch(addCard({listId, taskObj}));
   }
 
@@ -27,7 +26,9 @@ const Home = () => {
       dispatch(removeCard({listId, taskId}));
   }
 
-  const [cardDetailActive, setCardDetailActive] = useState(true);
+  const onEditCard = (listId: any, taskObj: any) => {
+    dispatch(editCard({listId, taskObj}));
+  }
 
   return (
       <Wrapper>
@@ -42,11 +43,12 @@ const Home = () => {
               onMoveLeft={(cardIndex: any) => onMove(columnIndex, cardIndex, DIRECTION_LEFT)}
               onMoveRight={(cardIndex: any) => onMove(columnIndex, cardIndex, DIRECTION_RIGHT)}
               onRemove={(taskId: any) => onRemove(board.id, taskId)}
+              onEditCard={onEditCard}
             />
           )}
         </Row>
         <AddCard
-          onAddTask={onAddTask}
+          onAddCard={onAddCard}
         />
         </Container>
       </Wrapper>

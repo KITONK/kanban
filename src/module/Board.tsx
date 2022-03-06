@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import Card from "./Card";
-import Input from "./Input/Input";
+import Input from "../components/Input/Input";
 import Modal from "./Modal";
+import Select from "../components/Select/Select";
+import TextArea from "../components/TextArea/TextArea";
 
 interface Props {
     board: any;
@@ -12,6 +14,7 @@ interface Props {
     onMoveLeft: any;
     onMoveRight: any;
     onRemove: any;
+    onEditCard: any;
 }
 
 const Board = ({
@@ -20,13 +23,33 @@ const Board = ({
     columnIndex,
     onMoveLeft,
     onMoveRight,
-    onRemove
+    onRemove,
+    onEditCard
     } : Props) => {
 
     const [isOpen, onOpen] = useState(false);
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
+    const [status, setStatus] = useState(board.title);
+    const [title, setTitle] = useState(cards.map((card: any) => card.text));
+    const [description, setDescription] = useState(cards.map((card: any) => card.description));
+
+    const onClose = () => {
+        onOpen(false);
+    }
     
+    const editCard = () => {
+        const obj = {
+            text: title,
+            description: description,
+        };
+
+        onEditCard(board.id, obj);
+        onClose();
+    }
+
+    function generateColor () {
+        return '#' + Math.floor(Math.random()*16777215).toString(16)
+      }
+
     const showCardModal = () => {
         return (
             <>
@@ -41,30 +64,30 @@ const Board = ({
                                     <Input
                                         label="Title"
                                         name="title"
-                                        value={card.text}
+                                        value={title}
                                         onChange={(e: any) => setTitle(e.target.value)}
                                         placeholder="Card title"
                                     />
-                                    <Input
+                                    <TextArea
                                         label="Description"
                                         name="description"
-                                        type="description"
-                                        value={card.description}
+                                        value={description}
                                         onChange={(e: any) => setDescription(e.target.value)}
                                         placeholder="Card description"
                                     />
                                 </Column>
                                 <Column type="content">
-                                    <Status>
-                                        Status: <span>{board.title}</span>
-                                    </Status>
-                                    
-                                    {card.tags.map((tag: any) => (
-                                        <div key={tag.title} style={{display: "flex", gap: "70px", alignItems: "center", marginTop: "20px"}}>
-                                            <span style={{fontSize: "18px"}}>Tags:</span>
-                                        <Tag style={{color: tag.color || "white", backgroundColor: tag.bgcolor || 'orange'}}>{tag.title}</Tag>
-                                        </div>
-                                    ))}
+                                    <Select 
+                                        value={status}
+                                        label="Status" 
+                                        placeholder="Status" 
+                                        options={[board.title]} 
+                                        onChange={(e: any) => setStatus(e.target.value)}
+                                    />
+                                        <Row>
+                                            <span>Tags:</span>
+                                            <Tag style={{backgroundColor: generateColor()}}>{card.tag}</Tag>
+                                        </Row>
                                     
                                     {card.user.map((executor: any) => (
                                         <div key={executor.lastName - executor.firstName} style={{display: "flex", gap: "42px", alignItems: "center", marginTop: "20px"}}>
@@ -78,7 +101,7 @@ const Board = ({
                                 </Column>
                             </Content>
                             <ButtonBlock>
-                                <Button onClick={() => { onOpen(false)}}>Save</Button>
+                                <Button onClick={editCard}>Save</Button>
                                 <Button types="delete" onClick={() => { onRemove(board.id, cardIndex), onOpen(false)}}>Delete</Button>
                             </ButtonBlock>
                         </CardModal>
@@ -140,6 +163,7 @@ const Tag = styled.div`
     border-radius: 3px;
     margin: 2px 5px;
     font-size: 70%;
+    color: white;
 `;
 
 const User = styled.div`
@@ -161,11 +185,15 @@ const Column = styled.div<{type?: string}>`
     `};
 `;
 
-const Status = styled.div`
+const Row = styled.div`
     display: flex; 
-    gap: 60px;
-    align-items: center;
-    font-size: 18px;
+    gap: 70px; 
+    align-items: center; 
+    margin-top: 20px;
+
+    span {
+        font-size: 18px;
+    }
 `;
 
 const Name = styled.span`
@@ -186,9 +214,11 @@ const ButtonBlock = styled.div`
 const Button = styled.button<{types?: string}>`
     font-size: 18px;
     border-radius: 4px;
+    padding: 7px 10px;
     border: 2px solid #c7c7c7;
     background-color: transparent;
     color: #5a5a5a;
+    cursor: pointer;
 
     ${({types}) =>
         types === "delete" &&

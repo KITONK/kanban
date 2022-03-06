@@ -1,5 +1,6 @@
 export const MOVE_CARD = "MOVE_CARD";
 export const ADD_CARD = "ADD_CARD";
+export const EDIT_CARD = "EDIT_CARD";
 export const DELETE_CARD = "DELETE_CARD";
 
 export const moveCard = ({ columnIndex, taskIndex, direction }: any) => {
@@ -29,6 +30,16 @@ export const removeCard = ({listId, taskId}: any) => {
         payload: {
             listId,
             taskId,
+        },
+    };
+};
+
+export const editCard = ({listId, taskObj}: any) => {
+    return {
+        type: EDIT_CARD,
+        payload: {
+            listId,
+            taskObj,
         },
     };
 };
